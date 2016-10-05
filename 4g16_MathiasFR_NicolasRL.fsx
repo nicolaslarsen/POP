@@ -96,59 +96,60 @@ printfn "Test4: %b" ((insert [1;3;4] 2) = [1;2;3;4])
 
 (* Kommentarer til løsningen af denne opgave skrives her *)
 
-///<summary>
-///about this function (remember: no more than 80 char pr line)
-///another line describing this function
-///</summary>
-///<params name="xs">
-///about this parameter
-///</params>
-///<params name="ys">
-///about this parameter
-///</params>
-///<returns>
-///what does the function return??
-///</returns>
-///<remarks>
-///if you have any remarks, write them here, else delete lines with remarks tags
-///</remarks>
-
-let rec intersect (xs : int list, ys : int list) =
-  [] : int list // Pladsholder. Erstat med din egen implementering af funktionen
+///<summary>Gets the intersection of two lists</summary>
+///<params name="list1">the first list of which to get the intersection</params>
+///<params name="list2">the second list of which to get the intersection</params>
+///<returns>A list containing the intersecting elements in each list</returns>
+let rec intersect list1 list2 =
+    // For each element in list1 we check if it exists in list2
+    match list1 with
+    | [] -> []
+    | x::xs ->
+        match list2 with
+        | [] -> []
+        | y::ys ->
+            // if they're the same, we pick one and continue
+            if y = x then
+                y :: intersect xs ys
+            // if y is smaller than x we continue through list2
+            elif y < x then
+                intersect list1 ys
+            // if x is smaller than y, x does not exist in y
+            else
+                intersect xs list2
 
 printfn "               HR 4.11(3)"
 //Test from the book
-printfn "Test1: %b" (intersect ([1;1;1;2;2], [1;1;2;4]) = [1;1;2])
+printfn "Test1: %b" (intersect [1;1;1;2;2] [1;1;2;4] = [1;1;2])
 //make more tests here
+printfn "Test2: %b" (intersect [1; 1; 5; 6; 9] [1; 2; 5; 9] = [1;5;9])
+printfn "Test3: %b" (intersect [] [1] = [])
+printfn "Test4: %b" (intersect [1] [] = [])
 
 (* 4 *)
 
 (* Kommentarer til løsningen af denne opgave skrives her *)
 
-///<summary>
-///about this function (remember: no more than 80 char pr line)
-///another line describing this function
-///</summary>
-///<params name="xs">
-///about this parameter
-///</params>
-///<params name="ys">
-///about this parameter
-///</params>
-///<returns>
-///what does the function return??
-///</returns>
-///<remarks>
-///if you have any remarks, write them here, else delete lines with remarks tags
-///</remarks>
+///<summary>adds list1 to list2 by emptying list1 into list2
+///one element at a time using the insert function.
+///When list1 is empty, list2 is returned</summary>
+///<params name="list1">the first list</params>
+///<params name="list2">the second list</params>
+///<returns>list2 after inserting the elements from list1</returns>
+let rec plus list1 list2 =
+    match list1 with
+    | [] -> list2
+    | x::xs ->
+        plus xs (insert list2 x)
 
-let rec plus (xs : int list, ys : int list) =
-  [] : int list // Pladsholder. Erstat med din egen implementering af funktionen
 
 printfn "               HR 4.11(4)"
 //Test from the book
-printfn "Test1: %b" (plus ([1;1;2],[1;2;4]) = [1;1;1;2;2;4])
+printfn "Test1: %b" (plus [1;1;2] [1;2;4] = [1;1;1;2;2;4])
 //make more tests here
+printfn "Test2: %b" (plus [4;5;6] [1;2;3] = [1;2;3;4;5;6])
+printfn "Test3: %b" (plus [] [1] = [1])
+printfn "Test4: %b" (plus [1] [] = [1])
 
 (* 5 *)
 
@@ -237,24 +238,30 @@ printfn "             OPGAVE 4g.1"
 
 (* Kommentarer til løsningen af denne opgave skrives her *)
 
-///<summary>
-///about this function (remember: no more than 80 char pr line)
-///another line describing this function
-///</summary>
-///<params name="xs">
-///about this parameter
-///</params>
-///<returns>
-///what does the function return??
-///</returns>
-///<remarks>
-///if you have any remarks, write them here, else delete lines with remarks tags
-///</remarks>
+///<summary>Removes any duplicates from a list</summary>
+///<params name="list">list to remove duplicates from</params>
+///<returns>The list with all duplicates removed</returns>
+let rec removeDuplicates list =
+    // removes the element "elem" from the list "list"
+    let rec removeElem elem list =
+        match list with
+        | [] -> []
+        | x::xs ->
+            // if x = elem, we need to remove x
+            if x = elem then removeElem elem xs
+            // otherwise keep x and continue
+            else x :: removeElem elem xs
 
-let rec removeDublicates (xs : 'a list) =
-  [] : 'a list // Pladsholder. Erstat med din egen implementering af funktionen
+    match list with
+    | [] -> []
+    // call removeElem using each element of the list
+    | x::xs -> x :: (removeDuplicates (removeElem x xs))
+
 
 printfn "               Remove Dublicates"
 //Test from the book
-printfn "Test1: %b" (removeDublicates [1;2;1;3;2] = [1;2;3])
+printfn "Test1: %b" (removeDuplicates [1;2;1;3;2] = [1;2;3])
 //make more tests here
+printfn "Test2: %b" (removeDuplicates [9;9;9] = [9])
+printfn "Test3: %b" (removeDuplicates [] = [])
+printfn "Test4: %b" (removeDuplicates [1;3;5;2;4;6;1;3;7;5] = [1;3;5;2;4;6;7])
