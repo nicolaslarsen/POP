@@ -35,34 +35,26 @@ let rec colourAt (x,y) figure =
 
 let rec checkFigure figure = 
     let checkColour (r,g,b) =
-        if 0 <= r && r <= 255 && 0 <= g && g <= 255 && 0 <= b && b <= 255 then
-            // check if all r, g, and b are between 0 and 255
-            true
-        else    
-            false
+        (0 <= r && r <= 255 && 0 <= g && g <= 255 && 0 <= b && b <= 255)
+        // check if all r, g, and b are between 0 and 255
+
     match figure with
     | Circle ((cx,cy), r, col) ->
-        if r >= 0 && (checkColour col) then
-            //check if r is not negative and check color
-            true
-        else 
-            false
+        (r >= 0 && (checkColour col))
+        //check if r is not negative and check color
+        
     | Rectangle ((x0,y0), (x1,y1), col) ->
-        if x0 <= x1 && y0 <= y1 && (checkColour col) then
-            //check if x0 and y0, does not come before x1 and y1. and check color.
-            true
-        else
-            false
+        (x0 <= x1 && y0 <= y1 && (checkColour col))
+        //check if x0 and y0, does not come before x1 and y1. and check color.
+        
     | Mix (f1,f2) ->
-        if (checkFigure f1) && (checkFigure f2) then
-            //if both figures, check separately, are true then the combined figure have to be true
-            true
-        else
-            false
+        ((checkFigure f1) && (checkFigure f2))
+        //if both figures, checked separately, are true then the combined figure have to be true
+        
     | Twice (f,(x1,y1)) ->
-        //only need to check if that figure is true
         checkFigure f
-    
+        //only need to check if that figure is true
+        
 let rec boundingBox figure =
     let comparePoints a b =
         //helper to check two sets of points
