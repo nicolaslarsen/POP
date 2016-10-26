@@ -1,7 +1,5 @@
 (* g6.1. *)
 
-(* Kommentarer til løsningen af denne opgave skrives her *)
-
 ///<summary>
 ///numberToDay giver en weekday option på en dag, fra Monday til Sunday 
 ///Ved at få nummeret på dagen. F.eks 3 giver Wednesday.
