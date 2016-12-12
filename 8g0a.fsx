@@ -10,6 +10,9 @@ type player = Human | Computer
 // The guesser gets 10 attempts
 let maxGuesses = 10
 
+// Randomizer
+let rand = System.Random() 
+
 /// <summary> Converts a string to a color. Fails if the color
 /// does not exist in the game with an exception Unknowncolor </summary>
 /// <params> The string to be converted </params>
@@ -21,6 +24,12 @@ let stringToColor = function
     | "purple" -> Purple
     | "white"  -> White
     | "black"  -> Black
+    | "r" -> Red
+    | "g" -> Green
+    | "y" -> Yellow
+    | "p" -> Purple
+    | "w" -> White
+    | "b" -> Black
     | _ -> failwith "UnknownColor"
                         
 /// <summary> Converts a color to a string. Fails if the color </summary>
@@ -38,7 +47,7 @@ let colorToString = function
 /// <params name="code"> The code to be converted </params>
 /// <returns> The codeString </returns>
 let codeToString code =
-    List.fold (fun acc elem -> acc + sprintf "%-8s " (colorToString elem)) "" code
+    List.fold (fun acc elem -> acc + sprintf "%-7s " (colorToString elem)) "" code
 
 /// <summary> By numbering the colors we can use random number generators etc.
 /// This function just maps integers 0..5 to a color </summary>
@@ -57,7 +66,6 @@ let intToColor = function
 /// <params> A dummy value used for nothing at all </params>
 /// <returns> The random color </returns>
 let getRandomColor _ =
-    let rand = System.Random()
     intToColor (rand.Next(0,6))
 
 /// <summary> Removes the first occurence of elem from the list </summary>
@@ -162,6 +170,7 @@ let validate(guess:code, colorCode:code) =
 /// <returns> A colorCode</returns>
 let rec makeCode = function
     | Computer ->
+        // Convert this dummy list to a list of colors
         let dummy = ["random";"random";"random";"random"]
         List.map getRandomColor dummy : code
     | Human ->
@@ -313,7 +322,7 @@ let rec playGame code board player =
 
         // You cannot format with %A, so we need the colors as a string
         let colorString = codeToString guesses
-        printfn "%5i: %s \t | \t %-3i White pins \t %-3i Black pins" (i+1) colorString whites blacks
+        printfn "%5i: %s\t |\t%-3i White pins \t %-3i Black pins" (i+1) colorString whites blacks
 
     // Just to make it look a litle better
     printfn "\n\n\n\n\n\n\n\n\n\n"
@@ -324,7 +333,7 @@ let rec playGame code board player =
                        
 /// <summary> Starts a game up by prompting the user for the gametype and code.
 /// Then displays the result at the end of the game </summary>
-let game () =
+let rec game () =
     Console.Clear()
     let (player1, player2) = getGameType()
     let code  = makeCode player1
@@ -333,9 +342,16 @@ let game () =
     let board = playGame code [] player2
     let (lastGuess,lastResult) = board.[board.Length-1]
     if lastResult = (0,4) then
-        printfn "\nYOU WON FAM\n"
+        printfn "\nPlayer 2 Won!\n"
         printfn "\nCode was: %s\n" codeString 
     else
-        printfn "\nYour moves are weak!\n"
+        printfn "\nPlayer 1 Won!\n"
         printfn "\nCode is: %s\n" codeString
+        
+    printf "To play again press enter, to quit type q"
+    let endString = System.Console.Read()
+    printfn "\n"
+    // q in ASCII is 113
+    if endString <> 113 then
+        game()
 game()
