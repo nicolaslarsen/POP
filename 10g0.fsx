@@ -2,20 +2,24 @@ open System
 
 // Randomizer
 let rand = new System.Random()
-            
+
+// The animal class            
 type Animal(weight, max_speed) = class
     let mutable current_speed = 0.0
     let mutable daily_required_intake = 0.0
     let mutable intake_percent = 0.0
         
+    // The required daily intake of an animal
     member this.daily_intake
         with get() = daily_required_intake
         and set(value) = daily_required_intake <- value
         
+    // The percent of the required intake the animal has eaten
     member this.intake_prct 
         with get() = intake_percent
         and set(value) = intake_percent <- value
         
+    // Weight max-speed and current speed
     member this.weight = weight
     member this.max_speed = max_speed
     member this.curr_speed = current_speed
@@ -44,6 +48,7 @@ type Animal(weight, max_speed) = class
         printfn "Current speed: %f" this.curr_speed
 end
 
+// The carnivore class
 type Carnivore(weight , speed) = class
     inherit Animal(weight, speed)
 
@@ -52,6 +57,7 @@ type Carnivore(weight , speed) = class
         this.daily_intake <- weight/100.0 * 8.0
 end
 
+// The herbivore class
 type Herbivore(weight, speed) = class
     inherit Animal(weight, speed)
 
@@ -61,7 +67,10 @@ type Herbivore(weight, speed) = class
 end
 
 let main() =
+    
+    // Variable to check whether or not there was a winner
     let mutable winner = false
+    
     while(not winner) do
         let mutable cheetah_average    = 0.0
         let mutable antelope_average   = 0.0
